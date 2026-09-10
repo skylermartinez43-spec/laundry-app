@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Laundry Customer Portal</title>
+    <link rel="stylesheet" href="customer.css">
+</head>
+<body>
+    
+    <!-- LOGIN SECTION -->
+    <div id="loginSection" class="login-page">
+        <div class="login-left">
+            <img src="laundryp.jpg" alt="Laundry Image" class="login-bg-image">
+            <div class="login-left-content">
+                <h1>Clean Clothes,<br>Guaranteed Fresh.</h1>
+                <p>Professional, fast, and reliable laundry service for your clothes.</p>
+            </div>
+        </div>
+        
+        <div class="login-right">
+            <div class="login-card">
+                <img src="person.jpg" alt="Laundry Logo" class="login-logo">
+                <h2>My account</h2>
+                <p class="login-subtitle">Log in to your account.</p>
+                
+                <form id="loginForm" onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input type="text" id="loginName" placeholder="Enter your name (e.g. Juan)" required>
+                    </div>
+                    
+                    <div class="forgot-password">
+                        <a href="#">Forgot Password?</a>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="loginContact" placeholder="Enter your password" required>
+                    </div>
+                    
+                    <button type="submit" class="btn-login">Sign In</button>
+                </form>
+                
+                <div id="loginResult" class="result-message"></div>
+                
+                <div class="login-footer">
+                    <p><a href="#">Terms of Service</a> | <a href="#">Data Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- CUSTOMER DASHBOARD -->
+    <div id="trackingSection" class="customer-dashboard">
+        <div class="dashboard-layout">
+            <div class="customer-sidebar">
+                <div class="sidebar-profile">
+                    <img src="person.jpg" alt="Logo">
+                    <h3>My Profile</h3>
+                    <p>Customer Portal</p>
+                </div>
+                <div class="sidebar-menu">
+                    <button class="menu-link active" onclick="showTab('newOrder')">📦 New Order</button>
+                    <button class="menu-link" onclick="showTab('overview')">🏠 Overview</button>
+                    <button class="menu-link" onclick="showTab('orders')">📋 My Orders</button>
+                    <button class="menu-link" onclick="showTab('notifications')">🔔 Notifications</button>
+                    <button class="menu-link" onclick="logoutCustomer()">🚪 Logout</button>
+                </div>
+            </div>
+
+            <div class="customer-main">
+                <div class="customer-header">
+                    <h2>Welcome, <span id="welcomeName">Customer</span></h2>
+                    <div class="header-right">
+                        <span class="badge">🔔 3 Notifications</span>
+                    </div>
+                </div>
+
+                <!-- NEW ORDER TAB -->
+                <div id="tab-newOrder" class="tab-content active-tab">
+                    <div class="order-form-container">
+                        <h4>📦 Submit New Order</h4>
+                        <form id="orderForm" onsubmit="submitOrder(event)">
+                            <div class="form-grid">
+                                <div>
+                                    <label>Contact Number</label>
+                                    <input type="text" id="contact" placeholder="e.g. 09171234567" required>
+                                </div>
+                                <div>
+                                    <label>Weight (kg)</label>
+                                    <input type="number" id="weight" step="0.1" required>
+                                </div>
+                                <div>
+                                    <label>Service Type</label>
+                                    <select id="serviceType" onchange="calculatePrice()" required>
+                                        <option value="">-- Select --</option>
+                                        <option value="Wash">Wash (₱50/kg)</option>
+                                        <option value="Dry">Dry (₱30/kg)</option>
+                                        <option value="Wash & Dry">Wash & Dry (₱70/kg)</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label>Pickup Option</label>
+                                    <select id="pickupOption" required>
+                                        <option value="Drop-off">Drop-off (Visit the shop)</option>
+                                        <option value="Pickup">Pickup (Pick up from home)</option>
+                                        <option value="Delivery">Delivery (Deliver to home)</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label>Assigned Employee (Optional)</label>
+                                    <select id="assignedEmployee">
+                                        <option value="Juan">Juan</option>
+                                        <option value="Maria">Maria</option>
+                                        <option value="Pedro">Pedro</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group full-width" id="addressField">
+                                <label>Address (For Pickup/Delivery)</label>
+                                <input type="text" id="address" placeholder="House No., Street, Barangay, City">
+                            </div>
+
+                            <h3>Total Price: <span id="totalPrice">₱0.00</span></h3>
+                            <h4>⏰ Estimated Pickup: <span id="estimatedPickup">--</span></h4>
+
+                            <button type="submit" class="btn-submit">📦 Submit Order</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- OVERVIEW TAB -->
+                <div id="tab-overview" class="tab-content">
+                    <div class="stats-row">
+                        <div class="stat-card orange">
+                            <span>Total Orders</span>
+                            <h3 id="statTotalOrders">0</h3>
+                        </div>
+                        <div class="stat-card purple">
+                            <span>Total Spent</span>
+                            <h3 id="statTotalSpent">₱0.00</h3>
+                        </div>
+                        <div class="stat-card green">
+                            <span>Ready for Pickup</span>
+                            <h3 id="statReady">0</h3>
+                        </div>
+                        <div class="stat-card blue">
+                            <span>Claimed</span>
+                            <h3 id="statClaimed">0</h3>
+                        </div>
+                    </div>
+
+                    <div class="row-2">
+                        <div class="card">
+                            <h4>🕐 Recent Activity</h4>
+                            <div id="recentActivity"></div>
+                        </div>
+                        <div class="card">
+                            <h4>📅 Pickup Calendar</h4>
+                            <div id="pickupCalendar"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ORDERS TAB -->
+                <div id="tab-orders" class="tab-content">
+                    <div class="card">
+                        <h4>📋 My Orders</h4>
+                        <div style="overflow-x: auto;">
+                            <table id="ordersTable">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Service</th>
+                                        <th>Total</th>
+                                        <th>Payment Status</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- NOTIFICATIONS TAB -->
+                <div id="tab-notifications" class="tab-content">
+                    <div class="card">
+                        <h4>🔔 Notifications</h4>
+                        <div id="notificationList"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PREPAID PAYMENT MODAL -->
+    <div id="paymentModal" class="modal-overlay">
+        <div class="receipt-card">
+            <h3>💸 Payment</h3>
+            <p><strong>Customer:</strong> <span id="payCustomer"></span></p>
+            <p><strong>Total Price:</strong> <span id="payTotal" style="color: #2563eb; font-weight: bold;"></span></p>
+            <label style="text-align: left; display: block;">Cash Tendered (₱)</label>
+            <input type="number" id="payCash" oninput="calculateChange()" placeholder="Enter cash" style="margin-bottom: 15px;">
+            <h3>Change: <span id="payChange">₱0.00</span></h3>
+            <div class="actions">
+                <button onclick="confirmPayment()">✅ Confirm Payment</button>
+                <button onclick="closePaymentModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- RECEIPT MODAL -->
+    <div id="receiptModal" class="modal-overlay">
+        <div class="receipt-container">
+            <div class="receipt-header">
+                <img src="images (1).jpg" alt="Logo">
+                <h3>My Laundry</h3>
+                <p>Smart Laundry Services</p>
+                <p>0981-234-5678 | laundry@example.com</p>
+            </div>
+            
+            <div class="receipt-body">
+                <div class="receipt-row">
+                    <span>Receipt #:</span>
+                    <strong id="rReceiptId"></strong>
+                </div>
+                <div class="receipt-row">
+                    <span>Customer:</span>
+                    <strong id="rCustomer"></strong>
+                </div>
+                <div class="receipt-row">
+                    <span>Service:</span>
+                    <strong id="rService"></strong>
+                </div>
+                <div class="receipt-row">
+                    <span>Weight:</span>
+                    <strong id="rWeight"></strong>
+                </div>
+                <div class="receipt-row">
+                    <span>Pickup Time:</span>
+                    <strong id="rPickup"></strong>
+                </div>
+            </div>
+            
+            <div class="receipt-total">
+                <h3>Total: <span id="rPrice"></span></h3>
+            </div>
+            
+            <div class="receipt-body">
+                <div class="receipt-row">
+                    <span>Cash Tendered:</span>
+                    <strong id="rCash"></strong>
+                </div>
+                <div class="receipt-row">
+                    <span>Change:</span>
+                    <strong id="rChange" style="color: #16a34a;"></strong>
+                </div>
+            </div>
+            
+            <div class="receipt-footer">
+                <p>⚡ Please keep this receipt safe. You'll need the token and plate number to exit.</p>
+                <p class="thank-you">Thank You For Using My Laundry!</p>
+            </div>
+            
+            <div class="receipt-actions">
+                <button onclick="printReceipt()">🖨️ Print / Save</button>
+                <button onclick="closeReceiptModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CANCEL MODAL (BAGONG DAGDAG) -->
+    <div id="cancelModal" class="modal-overlay">
+        <div class="receipt-card">
+            <h3>❌ Cancel Order</h3>
+            <p>Are you sure you want to cancel <strong>Order #<span id="cancelOrderId"></span></strong>?</p>
+            <label style="text-align: left; display: block; margin-top: 15px;">Reason for Cancellation</label>
+            <select id="cancelReason" style="margin-bottom: 15px;">
+                <option value="">-- Select Reason --</option>
+                <option value="Changed my mind">Changed my mind</option>
+                <option value="Found another laundry shop">Found another laundry shop</option>
+                <option value="Wrong order details">Wrong order details</option>
+                <option value="Emergency">Emergency</option>
+                <option value="Other">Other</option>
+            </select>
+            <div class="actions">
+                <button onclick="confirmCancel()" style="background:#ef4444;">✅ Confirm Cancel</button>
+                <button onclick="closeCancelModal()">Go Back</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="customer.js"></script>
+</body>
+</html>

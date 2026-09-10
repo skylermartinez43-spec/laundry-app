@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Laundry Management System</title>
+    <link rel="stylesheet" href="index.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- DASHBOARD -->
+    <div id="dashboardPage" class="page active">
+        <div class="layout">
+            <!-- SIDEBAR -->
+            <div class="sidebar">
+                <div class="sidebar-logo">
+                    <img src="images (1).jpg" alt="Logo">
+                    <h3>LAUNDRY<br>MANAGEMENT<br>SYSTEM</h3>
+                </div>
+                <div class="sidebar-menu">
+                    <button class="menu-btn active" onclick="showSection('dashboard')">📊 Dashboard</button>
+                    <button class="menu-btn" onclick="showSection('tracking')">📦 Tracking</button>
+                    <button class="menu-btn" onclick="showSection('customers')">👤 Customers</button>
+                    <button class="menu-btn" onclick="showSection('staff')">👔 Staff</button>
+                    <button class="menu-btn" onclick="showSection('reports')">📊 Reports</button>
+                </div>
+            </div>
+
+            <!-- MAIN CONTENT -->
+            <div class="main-content">
+                <div class="top-header">
+                    <h2 id="pageTitle">Dashboard</h2>
+                    <div class="user-info">👤 My Account</div>
+                </div>
+
+                <!-- DASHBOARD SECTION -->
+                <div id="section-dashboard" class="section active">
+                    <div class="stat-cards-grid">
+                        <div class="stat-card">
+                            <span>EARNINGS (MONTHLY)</span>
+                            <h3 id="dashboardMonthly">₱0</h3>
+                        </div>
+                        <div class="stat-card">
+                            <span>EARNINGS (ANNUAL)</span>
+                            <h3 id="dashboardAnnual">₱0</h3>
+                        </div>
+                        <div class="stat-card">
+                            <span>TOTAL CUSTOMER</span>
+                            <h3 id="dashboardCustomers">0</h3>
+                        </div>
+                        <div class="stat-card">
+                            <span>PENDING LAUNDRY</span>
+                            <h3 id="dashboardPending">0</h3>
+                        </div>
+                        <div class="stat-card">
+                            <span>PROCESS LAUNDRY</span>
+                            <h3 id="dashboardProcess">0</h3>
+                        </div>
+                        <div class="stat-card">
+                            <span>FOLDING LAUNDRY</span>
+                            <h3 id="dashboardFolding">0</h3>
+                        </div>
+                        <div class="stat-card">
+                            <span>READY FOR PICKUP</span>
+                            <h3 id="dashboardReady">0</h3>
+                        </div>
+                        <div class="stat-card">
+                            <span>CLAIMED LAUNDRY</span>
+                            <h3 id="dashboardClaimed">0</h3>
+                        </div>
+                    </div>
+
+                    <div class="charts-grid">
+                        <div class="chart-card">
+                            <h4>Monthly Earnings Overview</h4>
+                            <canvas id="monthlyChart"></canvas>
+                        </div>
+                        <div class="chart-card">
+                            <h4>Daily Earnings Overview</h4>
+                            <canvas id="dailyChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TRACKING SECTION -->
+                <div id="section-tracking" class="section">
+                    <div class="data-table-container">
+                        <h4>📦 Tracking Orders (Paid / Unpaid)</h4>
+                        <div style="overflow-x: auto;">
+                            <table id="trackingTable">
+                                <thead>
+                                    <tr>
+                                        <th>Order ID</th>
+                                        <th>Customer</th>
+                                        <th>Service</th>
+                                        <th>Total</th>
+                                        <th>Payment Status</th>
+                                        <th>Status</th>
+                                        <th>Pickup Time</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CUSTOMERS SECTION -->
+                <div id="section-customers" class="section">
+                    <div class="data-table-container">
+                        <h4>Customer List</h4>
+                        <div style="overflow-x: auto;">
+                            <table id="customersTable">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Contact</th>
+                                        <th>Joined</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STAFF SECTION -->
+                <div id="section-staff" class="section">
+                    <div class="data-table-container">
+                        <h4>Employee Performance</h4>
+                        <div style="overflow-x: auto;">
+                            <table id="employeesTable">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Role</th>
+                                        <th>Orders</th>
+                                        <th>Revenue</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="data-table-container" style="margin-top: 20px;">
+                        <h4>📅 Employee Monthly Reports</h4>
+                        <p><strong>Current Month:</strong> <span id="empMonth">-</span></p>
+                        <p><strong>Monthly Orders:</strong> <span id="empMonthlyOrders">0</span></p>
+                        <p><strong>Monthly Income:</strong> <span id="empMonthlyIncome">₱0.00</span></p>
+                        <p><strong>Total Employees:</strong> <span id="empTotalEmployees">0</span></p>
+                        <button onclick="loadEmployeeMonthlyReport()">Refresh Monthly Report</button>
+                    </div>
+                </div>
+
+                <!-- REPORTS SECTION -->
+                <div id="section-reports" class="section">
+                    <div class="data-table-container">
+                        <h4>Reports</h4>
+                        <div class="reports-summary">
+                            <p>Total Orders: <span id="totalOrders">0</span></p>
+                            <p>Total Income: <span id="totalIncome">₱0.00</span></p>
+                            <p>Most Used Service: <span id="mostUsedService">-</span></p>
+                            <button onclick="loadReports()">Refresh Reports</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="footer">
+                    Copyright © ZDSPGC 2023
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
